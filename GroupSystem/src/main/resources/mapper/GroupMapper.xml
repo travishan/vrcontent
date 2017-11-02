@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.group.dao.GroupDao">
+
+
+	<!-- 1.创建群组:public void createGroup(Group group); -->
+	<insert id="createGroup">
+		INSERT INTO `group`(group_name,group_desc,group_img,create_time,create_userid)
+		VALUES(#{groupName},#{groupDesc},#{groupImg},#{createTime},#{teacher.id})
+	</insert>
+	
+	<!-- 2.为群组添加学生:public void addStuToGroup(List<User> stus,Integer groupId); -->
+	<insert id="addStuToGroup">
+		INSERT INTO stu_join(stu_id,group_id)VALUES
+		<foreach collection="stus" item="stu" separator=",">
+			(#{stu.id},#{groupId})
+		</foreach>
+	</insert>
+	
+	<!--3.修改群的基本信息:public void updateGroup(Group group); -->
+	<update id="updateGroup">
+		update `group` 
+		<set>
+			<if test="groupName != null">group_name=#{groupName},</if>
+			<if test="groupDesc != null">group_desc=#{groupDesc},</if>
+			<if test="groupDesc != null">group_img=#{groupImg}</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<resultMap type="com.group.entities.Group" id="MyGroups">
+		<id column="id" property="id"/>
+		<result column="group_name" property="groupName"/>
+		<result column="group_desc" property="groupDesc"/>
+		<result column="create_time" property="createTime"/>
+		<association property="teacher" select="com.group.dao.UserDao.getUserById" column="create_userid"></association>
+		<collection property="stus"
+		 select="com.group.dao.GroupDao.getUsersByGroupId" column="id"></collection>
+	</resultMap>
+	
+	<!-- 4.查询自己创建的所有群组: public List<Group> getGroups(); -->
+	<select id="getGroups" resultMap="MyGroups">
+		SELECT id,group_name,group_img,group_desc,create_time,create_userid FROM `group`
+		where create_userid = #{createId}
+	</select>
+	
+	<!-- 4.1根据群组id查询群组内的所有学生:public List<User> getUsersByGroupId(Integer gid); -->
+	<select id="getUsersByGroupId" resultType="com.group.entities.User">
+		SELECT  u.`id`,u.`user_name`,u.`password`,u.`age`,u.`phone`,u.`identity`
+		FROM  stu_join sj
+		LEFT JOIN `user` u
+		ON sj.`stu_id`=u.`id`
+		WHERE sj.`group_id`=#{gid}
+	</select>
+	
+	
+	<!-- 5.根据id查询某个群组	public Group getGroupById(Integer id); -->
+	<select id="getGroupById" resultMap="MyGroups">
+		SELECT id,group_name,group_img,group_desc,create_time,create_userid
+		FROM `group` WHERE id = #{id};
+	</select>
+	
+	<!-- 6.根据名称搜索群，可以模糊匹配public Group getGroupByName(String groupName); -->
+	<select id="getGroupByName" resultMap="MyGroups">
+		SELECT id,group_name,group_desc,create_time,create_userid
+		FROM `group` WHERE group_name LIKE #{groupName};
+	</select>
+	
+	<!-- 7.批量删除某个群组内的学生:deleteStusByGroupId(@Param("gid")int groupId, @Param("stus")List<Integer> stusId);-->
+	<delete id="deleteStusByGroupId">
+		delete from stu_join 
+		where group_id=#{gid} 
+			  and stu_id in 
+			  <foreach collection="stus" item="stuId" open="(" close=")" separator=",">
+			  	#{stuId}
+			  </foreach>
+		
+	</delete>
+	
+	
+	<!--8.查询学生加入的群组:public List<Group> getGroupsByStuId(Integer stuId);  -->
+	<select id="getGroupsByStuId" resultMap="MyGroups">
+		SELECT g.id,g.group_name,g.group_img,g.group_desc,g.create_time,g.create_userid
+		FROM stu_join sj
+		LEFT JOIN `group` g
+		ON sj.`group_id` = g.`id`
+		WHERE stu_id = #{stuId};
+	</select>
+	
+	
+	
+
+</mapper>

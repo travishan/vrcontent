@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.group.dao.UserDao">
+	
+	<!-- public Student getUserByName(); -->
+	<select id="getUserByName" resultType="com.group.entities.User">
+		SELECT id, user_name userName,password password,age,phone,identity FROM `user` 
+		WHERE user_name=#{name} and password=#{password};
+	</select>
+	
+	<select id="getUserById" resultType="com.group.entities.User">
+		SELECT  id,user_name,`password`,age,phone,identity FROM `user`
+		WHERE id = #{id}
+	</select>
+	
+	<select id="getUserByIds" resultType="com.group.entities.User">
+		SELECT  id,user_name,`password`,age,phone,identity FROM `user`
+		WHERE id in
+		<foreach collection="list" open="(" close=")" separator="," item="id">
+			 #{id}	
+		</foreach>
+	</select>
+	
+	<!-- 2.根据名字模糊查询学生：public List<User> getUsersByName(String criteriaName); -->
+	<select id="getUsersByName" resultType="com.group.entities.User">
+		SELECT * FROM `user` WHERE user_name LIKE #{criteriaName} AND identity = 0;
+	</select>
+</mapper>
