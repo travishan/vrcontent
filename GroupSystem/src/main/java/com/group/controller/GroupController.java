@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.group.entities.Group;
@@ -36,7 +37,8 @@ public class GroupController {
 	
 	//列出教师创建的群组
 	@RequestMapping("/list")
-	public String listGroups(Model model,HttpServletRequest req) {
+	@ResponseBody
+	public List<Group> listGroups(Model model, HttpServletRequest req) {
 		User loginUser = (User) req.getSession().getAttribute("user");
 		List<Group> groups = groupService.getGroupsByCreateId(loginUser.getId());
 		
@@ -53,9 +55,9 @@ public class GroupController {
 			groupTasks.put(group.getId(), tasks);
 		}
 		
-		model.addAttribute("groupTasks",groupTasks);
-		model.addAttribute("groups",groups);
-		return "groupList";
+		//model.addAttribute("groupTasks",groupTasks);
+//		model.addAttribute("groups",groups);
+		return groups;
 	}
 	
 	//创建群组

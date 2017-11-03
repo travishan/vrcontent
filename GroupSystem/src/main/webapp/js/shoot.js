@@ -1,0 +1,2 @@
+/*TMODJS:{"version":1,"md5":"3aca010e4521057402881b7cc53e7929"}*/
+define(function(require){return require('template')('view/student/shoot', '<div class="studentBootstrap"> <div class="bootstrapMain"> <p class="bootstrap_close"></p> <p class="bootstrap_know"></p> </div> </div>');});

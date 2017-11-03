@@ -7,12 +7,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="${pageContext.request.scheme}://${pageContext.request.serverName}:
 ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
-
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
 <center>
 <h2>Hello World!</h2>
+
+
 ${requestScope.error}
 <form action="user/login" method="post">
 	<input type="text" name="stuName">

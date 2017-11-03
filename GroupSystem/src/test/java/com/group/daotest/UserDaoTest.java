@@ -46,7 +46,7 @@ public class UserDaoTest {
 		User u = new User();
 		u.setId(2);
 		group.setTeacher(u);
-		group.setCreateTime(new Date(new java.util.Date().getTime()));
+		//group.setCreateTime(new Date(new java.util.Date().getTime()));
 		mapper.createGroup(group);
 		session.commit();
 		//group(group_name,group_desc,create_time,create_userid)

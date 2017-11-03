@@ -1,0 +1,31 @@
+/*TMODJS:{"version":1,"md5":"175d531603d606890e52f6576951c86f"}*/
+define(function(require){return require('template')('view/student/nav', function($data,$filename
+/**/) {
+'use strict';var $utils=this,$helpers=$utils.$helpers,menuList=$data.menuList,menuLength=$data.menuLength,active=$data.active,i=$data.i,menu=$data.menu,moduleName=$data.moduleName,$escape=$utils.$escape,$out='';
+var menuList = menuList || [];
+var menuLength = menuList.length;
+var active = active || 'xxxxx';
+
+$out+=' <div class="course-nav course-nav-margin"> <ul class="nav nav-margin"> ';
+
+        for (var i = 0; i < menuLength; i++) {
+            var menu = menuList[i];
+            var moduleName=menu['moduleName'];
+        
+$out+=' <li menu_id="';
+$out+=$escape( menu.menuId);
+$out+='" class="';
+if(moduleName==active){
+$out+='active';
+}
+$out+='"> <i class="';
+$out+=$escape( menu.icon);
+$out+='"></i> <a href="';
+$out+=$escape( menu.menuUrl);
+$out+='" class="deleteLeft"> ';
+$out+=$escape( menu.menuText);
+$out+=' </a> </li> ';
+ } 
+$out+=' </ul> </div>';
+return new String($out);
+});});

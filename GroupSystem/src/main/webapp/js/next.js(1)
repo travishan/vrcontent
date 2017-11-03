@@ -1,0 +1,79 @@
+/*TMODJS:{"version":1,"md5":"21fba8da528420f112996d4f690248ca"}*/
+define(function(require){return require('template')('view/student/next', function($data,$filename
+/**/) {
+'use strict';var $utils=this,$helpers=$utils.$helpers,learnLog=$data.learnLog,timeNode=$data.timeNode,currentTime=$data.currentTime,nothing=$helpers.nothing,$escape=$utils.$escape,$out='';
+var learnLog = learnLog || {};
+var timeNode = timeNode||[];
+var currentTime=currentTime||"";
+
+$out+=' <div class="new-top"> ';
+ if(!nothing(learnLog.contextId)){ 
+$out+=' <span class="gxb-label"> 最近学习 </span> <span class="gxb-info" title="';
+$out+=$escape( learnLog.contextName);
+$out+='"> ';
+$out+=$escape( learnLog.contextName);
+$out+=' </span> <a id=\'learn-next\' class="gxb-btn gxb-btn-menu " unit_id="';
+$out+=$escape( learnLog.unitId);
+$out+='" context_id="';
+$out+=$escape( learnLog.contextId);
+$out+='" context_type="';
+$out+=$escape( learnLog.contextType);
+$out+='" school_id="';
+$out+=$escape( learnLog.schoolId);
+$out+='" class_id="';
+$out+=$escape( learnLog.classId);
+$out+='" redirect_uri="';
+$out+=$escape( learnLog.redirectUri);
+$out+='" canSubmitQuiz="';
+$out+=$escape( learnLog.canSubmitQuiz);
+$out+='" submissionId="';
+$out+=$escape(learnLog.submissionId);
+$out+='" href="javascript:void(0)"> 继续学习 </a> ';
+ }else{ 
+$out+=' <span class="gxb-welcome"> 欢迎加入课程 </span> <a id=\'learn-next\' class="gxb-btn gxb-btn-menu " href="javascript:void(0)"> 开始学习 </a> ';
+ } 
+$out+=' </div> <div class="next-progress"> <ul class="clear-fix"> <li class="clear-fix ';
+$out+=$escape(currentTime>timeNode[0].date?"current":"");
+$out+='"> <i class="icons"> ';
+if(currentTime<=timeNode[0].date){
+$out+=' <i class="iconsGray"></i> ';
+}
+$out+=' <i class="icon-start"></i> </i> <div class="content"> <p class="name">课程开始</p> <p class="time">';
+$out+=$escape(timeNode[0].time);
+$out+='</p> </div> <i class="';
+$out+=$escape(currentTime>timeNode[0].date?"jiao-green":"jiao-gray");
+$out+='"></i> </li> ';
+if(timeNode.length>3){
+$out+=' <li class="clear-fix ';
+$out+=$escape(currentTime>timeNode[3].date?"current":"");
+$out+='"> <i class="icons"> ';
+if(currentTime<=timeNode[3].date){
+$out+=' <i class="iconsGray"></i> ';
+}
+$out+=' <i class="icon-exam"></i> </i> <div class="content"> <p class="name">课程考试</p> <p class="time">';
+$out+=$escape(timeNode[3].time);
+$out+='</p> </div> <i class="';
+$out+=$escape(currentTime>timeNode[3].date?"jiao-green":"jiao-gray");
+$out+='"></i> <i class="jiao-white"></i> </li> ';
+}
+$out+=' <li class="clear-fix ';
+$out+=$escape(currentTime>timeNode[1].date?"current":"");
+$out+='"> <i class="icons"> ';
+if(currentTime<=timeNode[1].date){
+$out+=' <i class="iconsGray"></i> ';
+}
+$out+=' <i class="icon-end"></i> </i> <div class="content"> <p class="name">结课时间</p> <p class="time">';
+$out+=$escape(timeNode[1].time);
+$out+='</p> </div> <i class="';
+$out+=$escape(currentTime>timeNode[1].date?"jiao-green":"jiao-gray");
+$out+='"></i> <i class="jiao-white"></i> </li> <li class="clear-fix ';
+$out+=$escape(currentTime>timeNode[2].date?"current":"");
+$out+='"> <i class="icons"> ';
+if(currentTime<=timeNode[2].date){
+$out+=' <i class="iconsGray"></i> ';
+}
+$out+=' <i class="icon-publish"></i> </i> <div class="content"> <p class="name">公布成绩</p> <p class="time">';
+$out+=$escape(timeNode[2].time);
+$out+='</p> </div> <i class="jiao-white"></i> </li> </ul> </div>';
+return new String($out);
+});});

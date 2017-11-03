@@ -45,8 +45,13 @@ public class UserController {
 			return "forward:/index.jsp";
 		}
 		//用户登录成功后将其加入到session中
+		
+		
 		model.addAttribute("user", u);
-		return "success";
+		if(u.getIdentity().equals("1"))
+			return "teacher1";
+		else
+			return "student2";
 	}
 	
 	
