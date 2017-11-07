@@ -60,6 +60,20 @@ public class GroupController {
 		return groups;
 	}
 	
+	//管理群组
+	@RequestMapping("/manageGroup")
+	public String manageGroup(String groupId, Model model) {
+		
+		Group group = null; 
+		group = groupService.getGroupStusByGroupId(Integer.parseInt(groupId));
+		if(group == null) {
+			return "error";
+		}
+		model.addAttribute("group", group);
+		
+		return "teacher2";
+	}
+	
 	//创建群组
 	@RequestMapping("/create")
 	public String createGroup() {

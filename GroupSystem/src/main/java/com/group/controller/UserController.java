@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -20,6 +21,11 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@RequestMapping("/go")  
+	public String go(@RequestParam String type) {  
+	    return type;  
+	}  
 	
 	@RequestMapping(value= {"/login"},method=RequestMethod.POST)
 	public String login(String stuName, String password , Model model) {
@@ -49,11 +55,11 @@ public class UserController {
 		
 		model.addAttribute("user", u);
 		if(u.getIdentity().equals("1"))
-			return "teacher1";
+			return "redirect:/user/go?type=teacher1";
 		else
-			return "student2";
+			return "redirect:/user/go?type=student2";
 	}
-	
+
 	
 	@RequestMapping("/stus")
 	@ResponseBody
