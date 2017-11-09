@@ -97,35 +97,35 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
  --%>
                 <script>
                     var baseHref = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/";
-                        var app = angular.module("myApp", []);
-                        app.controller("groupCtrl", function($scope, $http) {
-                            $http.get(baseHref + "group/list")
-                                .then(function(result) {
-                                    $scope.records = result.data;
-                                    console.log($scope.records);
-                                });
-                        });
-                    
-                        app.controller("mainCtrl", function($scope){
-                            $scope.menu = 1;
-                            
-                        });
+                    var app = angular.module("myApp", []);
+                    app.controller("groupCtrl", function($scope, $http) {
+                        $http.get(baseHref + "group/list")
+                            .then(function(result) {
+                                $scope.records = result.data;
+                                console.log($scope.records);
+                            });
+                    });
+
+                    app.controller("mainCtrl", function($scope) {
+                        $scope.menu = 1;
+
+                    });
 
 
-                        /*  		 $.ajax({
-                        	        url: baseHref+'group/list',
-                        	        type:"GET",
-                        	        dateType: 'json',
-                        	        contentType: 'application/json',
-                        	        success:function(res){
-                        	        	alert("angular http success");
-                        	        	//$scope.records=res;
-                        	        	$scope.records = [
-                        	        		{"groupName":"dfdf"},
-                        	        		{"groupName":"dfdf12"}
-                        	        	];
-                        	        }
-                        	    }); */
+                    /*  		 $.ajax({
+                    	        url: baseHref+'group/list',
+                    	        type:"GET",
+                    	        dateType: 'json',
+                    	        contentType: 'application/json',
+                    	        success:function(res){
+                    	        	alert("angular http success");
+                    	        	//$scope.records=res;
+                    	        	$scope.records = [
+                    	        		{"groupName":"dfdf"},
+                    	        		{"groupName":"dfdf12"}
+                    	        	];
+                    	        }
+                    	    }); */
                     Console.log(baseHref);
 
                     function manageGroup(e) {
@@ -271,7 +271,7 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
                     </div>
 
 
-<!--
+                    <!--
                     <script>
                         
 
@@ -591,7 +591,7 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
 
                     <!-- uiView:  -->
                     <div class="content_body_bottom_height default-body-height ng-scope" data-ui-view="" style="height: auto;">
-<!--                       ng-bind-html="$userCenterHTML" 备份-->
+                        <!--                       ng-bind-html="$userCenterHTML" 备份-->
                         <div class="ng-binding ng-scope">
                             <div class="user">
                                 <div class="w1200">
@@ -732,10 +732,59 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
         </div> -->
                                                 </div>
                                             </div>
-                                            <div ng-show="menu==2">
-                                                <P>
-                                                    asdfas
-                                                </P>
+                                            <div ng-show="menu==2" style="width:60%;height:60%;margin-top:24px;margin-left:24px;">
+                                                <script>
+                                                    function getFileUrl(sourceId) {
+                                                        var url;
+                                                        if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE  
+                                                            url = document.getElementById(sourceId).value;
+                                                        } else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox  
+                                                            url = window.URL
+                                                                .createObjectURL(document.getElementById(sourceId).files
+                                                                    .item(0));
+                                                        } else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome  
+                                                            url = window.URL
+                                                                .createObjectURL(document.getElementById(sourceId).files
+                                                                    .item(0));
+                                                        }
+                                                        return url;
+                                                    }
+
+                                                    function preImg(sourceId, targetId) {
+                                                        var url = getFileUrl(sourceId);
+                                                        var imgPre = document.getElementById(targetId);
+                                                        imgPre.src = url;
+                                                        console.log(url);
+                                                    }
+
+                                                </script>
+                                                <center>
+                                                    <form action="group/create" method="post" enctype="multipart/form-data">
+                                                        <table style="border:1px">
+                                                            <tr>
+                                                                <td>群头像</td>
+                                                                <td>
+                                                                    <img src="images/default_headimg.png" style="width:200px;height: 200px; border-radius: 200px" id="headpic">
+                                                                    <input type="file" id="headimgbutton" name="groupImg" onchange="preImg(this.id,'headpic');">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><p style="width:100%; height:100%;">群名称</p></td>
+                                                                <td><input type="text" style="width:100%; height:100%;" name="groupName" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><p style="width:100%; height:100%;">群描述</p></td>
+                                                                <td><input type="text" style="width:100%; height:100%;" name="groupDesc" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>获取指定年级的学生列表</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </table>
+                                                        <input type="submit" value="Submit">
+                                                    </form>
+
+                                                </center>
                                             </div>
                                         </div>
                                     </div>

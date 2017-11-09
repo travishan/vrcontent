@@ -57,7 +57,7 @@ public class UserController {
 		if(u.getIdentity().equals("1"))
 			return "redirect:/user/go?type=teacher1";
 		else
-			return "redirect:/user/go?type=student2";
+			return "redirect:/user/go?type=student1";
 	}
 
 	

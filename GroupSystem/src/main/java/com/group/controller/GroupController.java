@@ -84,8 +84,10 @@ public class GroupController {
 	public String successCreatedGroup(@RequestParam("groupImg")MultipartFile file,
 			String groupName, String groupDesc,HttpServletRequest req) {
 		
-		String fileName = file.getOriginalFilename();
-		String path = req.getServletContext().getRealPath("/images");
+		//String fileName = file.getOriginalFilename();
+		String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
+		String fileName = System.currentTimeMillis() + suffix;
+		String path = req.getServletContext().getRealPath("images");
 		File targetFile = new File(path+"/"+fileName);
 		try {
 			file.transferTo(targetFile);
@@ -192,11 +194,13 @@ public class GroupController {
 	
 	//查询学生加入的群组
 	@RequestMapping(value="/myGroups",method=RequestMethod.GET)
-	public String getMyGroups(HttpServletRequest req,Model model) {
+	@ResponseBody
+	public List<Group> getMyGroups(HttpServletRequest req,Model model) {
 		List <Group> myGroups = groupService.getGroupsByStuId(req);
 		model.addAttribute("myGroups", myGroups);
 		System.out.println(myGroups);
-		return "stu/groups";
+		//return "stu/groups";
+		return myGroups;
 	}
 	
 	
