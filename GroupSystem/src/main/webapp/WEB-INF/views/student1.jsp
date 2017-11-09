@@ -74,6 +74,11 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
 
             <script src="./index_files/business_app.min.js.下载"></script>
             <script>
+            
+            	function manageGroup(e){
+            		var url = baseHref + "group/manageGroup?groupId=" + e.getAttribute("data-id");
+                    window.location.href = url;
+            	}
                 if (!true) {
                     window.location.href = "//www.gaoxiaobang.com";
                 }
@@ -652,8 +657,8 @@ ${pageContext.request.serverPort}${pageContext.request.contextPath}/">
 
                                                     <!--未开课-->
 
-                                                    <div class="myhome_Course_btn ng-scope" ng-click="startstudy(item.classId)">
-                                                        管理群
+                                                    <div class="myhome_Course_btn ng-scope"  data-id={{item.id}} onclick="manageGroup(this)">
+                                                       进入群
                                                     </div>
                                                     <a ng-hide="time_1(item.startAt) &gt; 0" ng-href="/#/user/class_analysis/2856" href="#">
                                                         <div class="myhome_Course_btn myhome_Course_btn2">

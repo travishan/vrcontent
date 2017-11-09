@@ -60,6 +60,20 @@ public class User {
 		this.groups = groups;
 	}
 	
+	public boolean isTeacher() {
+		if(identity.equals("1")) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isStudent() {
+		if(identity.equals("0")) {
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", age=" + age + ", phone="

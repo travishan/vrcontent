@@ -62,7 +62,7 @@ public class GroupController {
 	
 	//管理群组
 	@RequestMapping("/manageGroup")
-	public String manageGroup(String groupId, Model model) {
+	public String manageGroup(String groupId, Model model, HttpServletRequest req) {
 		
 		Group group = null; 
 		group = groupService.getGroupStusByGroupId(Integer.parseInt(groupId));
@@ -70,8 +70,12 @@ public class GroupController {
 			return "error";
 		}
 		model.addAttribute("group", group);
-		
-		return "teacher2";
+		User loginUser = (User) req.getSession().getAttribute("user");
+		if(loginUser.isTeacher()) {
+			return "teacher2";
+		} else {
+			return "student2";
+		}
 	}
 	
 	//创建群组
