@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.dao.TaskDao">
+	<!-- //发布任务：public void addTask(Task task); -->
+	<insert id="addTask" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO task(task_name,task_desc,start_time,end_time,publisher_id)
+		VALUES(#{taskName},#{taskDesc},#{startTime},#{endTime},#{teacher.id})
+	</insert>
+	
+	<!-- //为任务指定学生:public void addStusToTask(List<User>stus,Integer taskId); -->
+	<insert id="addStusToTask">
+		INSERT INTO stu_task(stu_id,task_id)VALUES
+		<foreach collection="stus" item="stu" separator=",">
+			(#{stu.id},#{taskId})
+		</foreach>
+	</insert>
+	
+	<!--1.3为当前任务指定群组:addGroupsToTask(List<Integer>gids,Integer taskId);-->
+	<insert id="addGroupsToTask">
+		insert into group_task(group_id,task_id) values
+		<foreach collection="gids" item="gid" separator=",">
+			(#{gid},#{taskId})
+		</foreach>
+	</insert>
+	
+	
+	<!-- //修改某个任务:public void updateTask(Task task); -->
+	<update id="updateTask">
+		UPDATE task 
+		<set>
+			<if test="taskName != null">task_name=#{taskName},</if>
+			<if test="taskDesc != null">task_desc=#{taskDesc},</if>
+			<if test="endTime != null">end_time=#{endTime}</if>
+		</set>
+		WHERE id =#{id}
+	</update>
+	
+	
+	<resultMap type="com.group.entities.Task" id="MyTask">
+		<id column="id" property="id"/>
+		<result column="task_name" property="taskName"/>
+		<result column="task_desc" property="taskDesc"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<association property="teacher" column="publisher_id" select="com.group.dao.UserDao.getUserById"></association>
+		<collection property="stus" select="com.group.dao.TaskDao.getUsersByTaskId" column="id"></collection>
+	</resultMap>
+	
+	<!-- //查询某个具体的任务:public Task getTaskById(Integer taskId); -->
+	<select id="getTaskById" resultMap="MyTask">
+		SELECT id,task_name,task_desc,start_time,end_time,publisher_id
+		FROM task
+		WHERE id = #{taskId};
+	</select>
+	
+	<!-- //查询某个任务的学生:public List<User> getUsersByTaskId(Integer taskId); -->
+	<select id="getUsersByTaskId" resultType="com.group.entities.User">
+		SELECT u.`id`,u.`user_name`,u.`age`,u.`phone`
+		FROM stu_task st
+		LEFT JOIN `user` u
+		ON st.`stu_id` = u.`id`
+		WHERE st.`task_id`=#{taskId}
+	</select>
+
+
+	<!-- //查询某个老师发布的所有任务:public List<Task> getTasksByPublishId(Integer teacherId); -->
+	<select id="getTasksByPublishId" resultMap="MyTask">
+		SELECT id,task_name,task_desc,start_time,end_time,publisher_id
+		FROM task WHERE publisher_id=#{teacherId}
+	</select>
+	
+	
+	<!-- //查询某个学生的所有要完成的任务:public List<Task> getTasksByStuId(Integer stuId); -->
+	<select id="getTasksByStuId" resultType="com.group.entities.Task">
+		SELECT t.`id`,t.`task_name`,t.`task_desc`,t.`start_time`,t.`end_time`
+		FROM stu_task st
+		LEFT JOIN task t
+		ON st.`task_id` = t.`id`
+		WHERE stu_id =#{stuId};
+	</select>
+
+
+	<!-- //查询某个群组的任务:public List<Task> getTaskByGroupId(Integer gid); -->
+	<select id="getTaskByGroupId" resultType="com.group.entities.Task">
+		SELECT t.`id`,t.`task_name`,t.`task_desc`,t.`start_time`,t.`end_time`
+		FROM group_task gt
+		LEFT JOIN task t
+		ON gt.`task_id` = t.`id`
+		WHERE group_id =#{gid};
+	</select>
+
+
+</mapper>

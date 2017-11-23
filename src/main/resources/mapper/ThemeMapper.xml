@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.dao.ThemeDao">
+
+<!--定义Theme封装规则，查询时封装评论  -->
+<resultMap type="com.group.entities.Theme" id="myTheme">
+	<id column="id" property="id"/>
+	<result column="theme_topic" property="themeTopic"/>
+	<result column="content" property="content"/>
+	<result column="create_time" property="createTime"/>
+	
+	<result column="initiator_id" property="initiatorId"/>
+	<result column="forum_id" property="forumId"/>
+	<collection property="comms" select="com.group.dao.CommentDao.getCommsByThemeId" column="id"></collection>
+	
+</resultMap>
+
+
+<!-- //2.查询某个讨论区的所有主题:public List<Theme> getThemesByForumId(Integer forumId); -->
+	<select id="getThemesByForumId" resultMap="myTheme">
+		SELECT  id,theme_topic,content,initiator initiator_id,create_time,forum_id  
+		FROM theme
+		WHERE forum_id =#{forumId};
+	</select>
+	
+	<!-- //1.发布一个讨论主题:public void addTheme(Theme theme); -->
+	<insert id="addTheme">
+		INSERT INTO theme(theme_topic,content,initiator,create_time,forum_id)
+		VALUES(#{themeTopic},#{content},#{initiatorId},#{createTime},#{forumId});	
+	</insert>
+	
+	<!-- //3.删除某个主题:public void deleteTheme(Integer id); -->
+	<delete id="deleteTheme">
+		DELETE  FROM theme WHERE id =#{id}
+	</delete>
+	
+	
+	<!-- //4.查询某个用户发布的话题：List<Theme> getThemesByUserId(Integer uid); -->
+	<select id="getThemesByUserId" resultMap="myTheme">
+		SELECT id,theme_topic,content,initiator initiator_id,create_time,forum_id
+		FROM theme
+		WHERE initiator = #{uid}
+	</select>
+	
+</mapper>

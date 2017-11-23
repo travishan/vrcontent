@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group.dao.CommentDao">
+	
+	<!-- //1.评论某个话题:addCommentForTheme(Comment comm);-->
+	<insert id="addCommentForTheme">
+		INSERT  INTO `comment`(theme_id,content,user_id)
+		VALUE(#{themeId},#{content},#{user.id}); 
+	</insert>
+	
+	<resultMap type="com.group.entities.Comment" id="MyComm">
+		<id column="id" property="id"/>
+		<result column="content" property="content"/>
+		<association property="user" column="user_id" select="com.group.dao.UserDao.getUserById"></association>
+	</resultMap>
+	<!-- //2.查询某个话题的所有评论:List<Comment> getCommsByThemeId(Integer themeId); -->
+	<select id="getCommsByThemeId" resultMap="MyComm" >
+		SELECT id,content,user_id 
+		FROM `comment`
+		WHERE theme_id =#{themeId};
+	</select>
+</mapper>	
